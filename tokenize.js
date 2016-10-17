@@ -1,4 +1,6 @@
-var LOG_LEVEL = 10;
+var LOG_LEVEL = 10; // Higher log level = log more
+
+var operators = {};
 
 var getEscape = function(escapeLetter) {
   switch (escapeLetter) {
@@ -31,7 +33,29 @@ var tokenize = function(codeString) {
   };
   var parseComment = function(comment) {
     log("Parsing comment " + JSON.stringify(comment), 8);
-    // TODO parse comments
+    if (comment.charAt(0) === '-' && comment.charAt(comment.length - 1) === '-') {
+      var directives = comment.substring(1, comment.length - 1).trim().split("\n");
+      var curDirective;
+      for (var i = 0; i < directives.length; i++) {
+        curDirective = directives[i].split(/\s/);
+        switch (curDirective[0]) {
+          case 'infixr':
+            if (curDirective.length !== 3) {
+              throw "Error: Wrong number of arguments passed to directive \"infixr\"";
+            }
+            operators[curDirective[1]] = ['right', parseInt(curDirective[2], 10)];
+            break;
+          case 'infixl':
+            if (curDirective.length !== 3) {
+              throw "Error: Wrong number of arguments passed to directive \"infixl\"";
+            }
+            operators[curDirective[1]] = ['left', parseInt(curDirective[2], 10)];
+            break;
+          default:
+            throw "Error: Unrecognized directive + " JSON.stringify(curDirective[0]);
+        }
+      }
+    }
   };
   var curToken = null;
   var char, curType;
