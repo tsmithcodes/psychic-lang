@@ -25,7 +25,7 @@ var log = function(thing, level) {
 
 var tokenize = function(codeString) {
   var tokens = [];
-  var indices = {infix: {}, outfix: {}};
+  var indices = {infix:[], infixer:[], groups:[]};
   var addToken = function(token) {
     log("Adding token " + JSON.stringify(token), 10);
     tokens.push(token);
@@ -139,7 +139,7 @@ var tokenize = function(codeString) {
               break;
             case '\\':
               curToken.val += getEscape(codeString.charAt(i + 1));
-              i++; // Skip next char (already dealt with) (TODO)
+              i++;
               break;
             default:
               curToken.val += char;
