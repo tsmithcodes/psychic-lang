@@ -52,7 +52,7 @@ var tokenize = function(codeString) {
             operators[curDirective[1]] = ['left', parseInt(curDirective[2], 10)];
             break;
           default:
-            throw "Error: Unrecognized directive + " JSON.stringify(curDirective[0]);
+            throw "Error: Unrecognized directive " + JSON.stringify(curDirective[0]);
         }
       }
     }
